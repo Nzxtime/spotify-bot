@@ -1,0 +1,17 @@
+{
+  "spotify": {
+    "spotify_client_id": "",
+    "spotify_client_secret": "",
+    "spotify_username": "<spotify username or email>",
+    "spotify_playlist_id": "<playlist_id of the song-request spotify playlist>"
+  },
+  "twitch": {
+    "twitch_irc_token": "",
+    "twitch_client_id": "",
+    "twitch_nick": "",
+    "twitch_prefix": "",
+    "twitch_initial_channels": [
+      ""
+    ]
+  }
+}
