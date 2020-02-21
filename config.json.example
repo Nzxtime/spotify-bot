@@ -4,6 +4,7 @@
     "spotify_client_secret": "",
     "spotify_username": "<spotify username or email>",
     "spotify_playlist_id": "<playlist_id of the song-request spotify playlist>"
+    "spotify_redirect_uri": "<your spotify redirect uri - http://localhost would be enough for the most>"
   },
   "twitch": {
     "twitch_irc_token": "",

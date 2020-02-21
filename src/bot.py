@@ -10,7 +10,10 @@ class Bot(commands.Bot):
 
     scope = 'playlist-modify-public playlist-modify-private user-read-currently-playing user-read-playback-state ' \
             'user-modify-playback-state'
-    token = util.prompt_for_user_token(data['spotify']['spotify_username'], scope)
+    token = util.prompt_for_user_token(username=data['spotify']['spotify_username'], scope=scope,
+                                       client_id=data['spotify']['spotify_client_id'],
+                                       client_secret=data['spotify']['spotify_client_secret'],
+                                       redirect_uri=data['spotify']['spotify_redirect_uri'])
 
     def __init__(self):
         super().__init__(irc_token=self.data['twitch']['twitch_irc_token'],
@@ -33,18 +36,22 @@ class Bot(commands.Bot):
 
     @commands.command(name='play')
     async def play(self, ctx, arg1):
-        result = self.add_track_to_playlist(self.username, self.playlist_id, [arg1])
+        result = self.add_track_to_playlist(self.data['spotify']['spotify_username'],
+                                            self.data['spotify']['spotify_playlist_id'], [arg1])
         await ctx.send(f'@{ctx.author.name} {result}')
 
     @commands.command(name='skip')
     async def skip(self, ctx):
-        result = self.skip_song()
-        await ctx.send(f'@{ctx.author.name} {result}')
+        print(self.get_users())
+        if self.get_users():
+            result = self.skip_song()
+            await ctx.send(f'@{ctx.author.name} {result}')
 
     @commands.command(name='pl-clear')
     async def clear(self, ctx):
         if str(ctx.author.name).lower() == 'laserlord_':
-            result = self.clear_playlist(self.username, self.playlist_id)
+            result = self.clear_playlist(self.data['spotify']['spotify_username'],
+                                         self.data['spotify']['spotify_playlist_id'])
             await ctx.send(f'@{ctx.author.name} {result}')
         else:
             await ctx.send(f'@{ctx.author.name}, you don\'t have the needed permission!')
