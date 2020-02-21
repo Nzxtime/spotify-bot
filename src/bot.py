@@ -8,7 +8,8 @@ class Bot(commands.Bot):
     with open('config.json') as config_file:
         data = json.load(config_file)
 
-    scope = 'playlist-modify-public playlist-modify-private'
+    scope = 'playlist-modify-public playlist-modify-private user-read-currently-playing user-read-playback-state ' \
+            'user-modify-playback-state'
     token = util.prompt_for_user_token(data['spotify']['spotify_username'], scope)
 
     def __init__(self):
@@ -33,6 +34,11 @@ class Bot(commands.Bot):
     @commands.command(name='play')
     async def play(self, ctx, arg1):
         result = self.add_track_to_playlist(self.username, self.playlist_id, [arg1])
+        await ctx.send(f'@{ctx.author.name} {result}')
+
+    @commands.command(name='skip')
+    async def skip(self, ctx):
+        result = self.skip_song()
         await ctx.send(f'@{ctx.author.name} {result}')
 
     @commands.command(name='pl-clear')
@@ -89,6 +95,22 @@ class Bot(commands.Bot):
             print('Getting new token')
             self.token['access_token'] = spotipy.SpotifyOAuth.get_access_token(spotipy.SpotifyOAuth())
             self.clear_playlist(username, playlist_id)
+
+    def skip_song(self):
+        if self.token:
+            sp = spotipy.Spotify(auth=self.token)
+            sp.trace = False
+            print(sp.devices())
+            for device in sp.devices()['devices']:
+                print(device)
+                if device['is_active']:
+                    results = sp.next_track(device_id=device['id'])
+                    print(results)
+            return 'Skipped song'
+        else:
+            print('Getting new token')
+            self.token['access_token'] = spotipy.SpotifyOAuth.get_access_token(spotipy.SpotifyOAuth())
+            self.skip_song()
 
 
 bot = Bot()
