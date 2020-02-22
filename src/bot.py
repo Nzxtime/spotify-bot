@@ -20,6 +20,7 @@ class Bot(commands.Bot):
                          client_id=self.data['twitch']['twitch_client_id'],
                          nick=self.data['twitch']['twitch_nick'], prefix=self.data['twitch']['twitch_prefix'],
                          initial_channels=self.data['twitch']['twitch_initial_channels'])
+        self.disable_loop_and_shuffle()
 
     # Events don't need decorators when subclassed
     async def event_ready(self):
@@ -54,6 +55,14 @@ class Bot(commands.Bot):
             result = self.clear_playlist(self.data['spotify']['spotify_username'],
                                          self.data['spotify']['spotify_playlist_id'])
             await ctx.send(f'@{ctx.author.name} {result}')
+        else:
+            await ctx.send(f'@{ctx.author.name}, you don\'t have the needed permission!')
+
+    @commands.command(name='dls')
+    async def dls(self, ctx):
+        if ctx.message.tags['mod'] == 1 or str(ctx.author.name).lower() == str(ctx.message.channel).lower():
+            self.disable_loop_and_shuffle()
+            await ctx.send(f'@{ctx.author.name} disabled loop and shuffle!')
         else:
             await ctx.send(f'@{ctx.author.name}, you don\'t have the needed permission!')
 
@@ -117,6 +126,20 @@ class Bot(commands.Bot):
             print('Getting new token')
             self.token['access_token'] = spotipy.SpotifyOAuth.get_access_token(spotipy.SpotifyOAuth())
             self.skip_song()
+
+    def disable_loop_and_shuffle(self):
+        if self.token:
+            sp = spotipy.Spotify(auth=self.token)
+            sp.trace = False
+            for device in sp.devices()['devices']:
+                if device['is_active']:
+                    sp.shuffle(False, device['id'])
+                    sp.repeat('off', device['id'])
+                    return
+        else:
+            print('Getting new token')
+            self.token['access_token'] = spotipy.SpotifyOAuth.get_access_token(spotipy.SpotifyOAuth())
+            self.disable_loop_and_shuffle()
 
 
 bot = Bot()
