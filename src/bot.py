@@ -108,9 +108,7 @@ class Bot(commands.Bot):
         if self.token:
             sp = spotipy.Spotify(auth=self.token)
             sp.trace = False
-            print(sp.devices())
             for device in sp.devices()['devices']:
-                print(device)
                 if device['is_active']:
                     results = sp.next_track(device_id=device['id'])
                     print(results)
