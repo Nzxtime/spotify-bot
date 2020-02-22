@@ -42,14 +42,15 @@ class Bot(commands.Bot):
 
     @commands.command(name='skip')
     async def skip(self, ctx):
-        print(self.get_users())
-        if self.get_users():
+        if ctx.message.tags['mod'] == 1 or str(ctx.author.name).lower() == str(ctx.message.channel).lower():
             result = self.skip_song()
             await ctx.send(f'@{ctx.author.name} {result}')
+        else:
+            await ctx.send(f'@{ctx.author.name}, you don\'t have the needed permission!')
 
     @commands.command(name='pl-clear')
     async def clear(self, ctx):
-        if str(ctx.author.name).lower() == 'laserlord_':
+        if ctx.message.tags['mod'] == 1 or str(ctx.author.name).lower() == str(ctx.message.channel).lower():
             result = self.clear_playlist(self.data['spotify']['spotify_username'],
                                          self.data['spotify']['spotify_playlist_id'])
             await ctx.send(f'@{ctx.author.name} {result}')
