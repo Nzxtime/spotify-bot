@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="spotify-bot",
-    version="1.0.4",
+    version="1.0.7",
     author="Nzxtime",
     author_email="marcel.streicher58@gmail.com",
     description="A twitch bot which can control your spotify account",

@@ -6,14 +6,20 @@ from os import path
 
 
 class Bot(commands.Bot):
-    if not path.exists('config.json'):
-        print('Create a config.json file in the following directory:')
-        print(path.abspath('.'))
-        print('Use the config.json.example as a reference.')
-        exit()
+    for location in path.expanduser("~/.config/spotify-bot/"), "/etc/spotify-bot/":
+        try:
+            print(path.join(location, "config.json"))
+            with open(path.join(location, "config.json")) as source:
+                data = json.load(source)
+        except IOError:
+            pass
 
-    with open('config.json') as config_file:
-        data = json.load(config_file)
+    if data is None:
+        print('Create a config.json file in the following directory:')
+        print(path.abspath(path.expanduser("~/.config/spotify-bot/")) + ' or /etc/spotify-bot/')
+        print('Use the config.json.example as a reference.')
+        print('For further information visit https://github.com/Nzxtime/spotify-bot')
+        exit()
 
     scope = 'playlist-modify-public playlist-modify-private user-read-currently-playing user-read-playback-state ' \
             'user-modify-playback-state'
