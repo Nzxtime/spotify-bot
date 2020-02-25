@@ -1,8 +1,8 @@
 import setuptools
 
 setuptools.setup(
-    name="spotify-bot-nzxtime",
-    version="1.0.0",
+    name="spotify-bot",
+    version="1.0.4",
     author="Nzxtime",
     author_email="marcel.streicher58@gmail.com",
     description="A twitch bot which can control your spotify account",
@@ -10,9 +10,11 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/Nzxtime/spotify-bot",
     packages=setuptools.find_packages(),
+    entry_points={'console_scripts': ['spotify-bot=spotify_bot.bot:main']},
+    install_requires=['spotipy', 'twitchio'],
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: GNU General Public License v3.0",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',

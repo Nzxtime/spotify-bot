@@ -2,9 +2,16 @@ import spotipy
 import spotipy.util as util
 from twitchio.ext import commands
 import json
+from os import path
 
 
 class Bot(commands.Bot):
+    if not path.exists('config.json'):
+        print('Create a config.json file in the following directory:')
+        print(path.abspath('.'))
+        print('Use the config.json.example as a reference.')
+        exit()
+
     with open('config.json') as config_file:
         data = json.load(config_file)
 
