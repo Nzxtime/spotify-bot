@@ -122,7 +122,12 @@ class Bot(commands.Bot):
 
     @commands.command(name='help')
     async def dls(self, ctx):
-        await ctx.send(f'@{ctx.author.name} song, play, skip, clear, dls')
+        await ctx.send(f'@{ctx.author.name} song, play, skip, clear, dls, queue')
+
+    @commands.command(name='queue')
+    async def queue(self, ctx):
+        await ctx.send(
+            f'@{ctx.author.name} https://open.spotify.com/playlist/{self.data["spotify"]["spotify_playlist_id"]}')
 
 
 bot = Bot()
